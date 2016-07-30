@@ -1,18 +1,25 @@
-﻿//========= Copyright 2015, Valve Corporation, All rights reserved. ===========
+﻿//======= Copyright (c) Valve Corporation, All rights reserved. ===============
 //
 // Purpose: Flips the camera output back to normal for D3D.
 //
 //=============================================================================
 
 using UnityEngine;
+using System.Collections;
 
-[ExecuteInEditMode]
 public class SteamVR_CameraFlip : MonoBehaviour
 {
-	void Awake()
+	static Material blitMaterial;
+
+	void OnEnable()
 	{
-		Debug.Log("SteamVR_CameraFlip is deprecated in Unity 5.4 - REMOVING");
-		DestroyImmediate(this);
+		if (blitMaterial == null)
+			blitMaterial = new Material(Shader.Find("Custom/SteamVR_BlitFlip"));
+	}
+
+	void OnRenderImage(RenderTexture src, RenderTexture dest)
+	{
+		Graphics.Blit(src, dest, blitMaterial);
 	}
 }
 
