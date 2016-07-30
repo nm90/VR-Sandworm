@@ -52,7 +52,7 @@ public class Sandworm : MonoBehaviour {
 	Transform [] startParents;
 	float [] startParams;
 	float baseStartParam;
-	Animation animation;
+	Animation myAnimation;
 	Animation splineAnimation;
 	public bool Suspend;
 	float startTime;
@@ -119,16 +119,16 @@ public class Sandworm : MonoBehaviour {
 		}
 		baseStartParam = Spline.GetAdjustedTimeAtPoint (Worm.position, 0.0001f, 0f, 1f, 0.0001f);
 
-		animation = Worm.parent.GetComponent <Animation> ();
-		if (animation == null) {
-			animation = Worm.parent.gameObject.AddComponent <Animation> ();
-			animation.playAutomatically = false;
+		myAnimation = Worm.parent.GetComponent <Animation> ();
+		if (myAnimation == null) {
+			myAnimation = Worm.parent.gameObject.AddComponent <Animation> ();
+			myAnimation.playAutomatically = false;
 		}
-		animation.clip = SandwormAnimationClip;
-		animation.AddClip (SandwormAnimationClip, "SandwormAnimation");
-		animation.Play ("SandwormAnimation");
-		animation ["SandwormAnimation"].enabled = true;
-		animation ["SandwormAnimation"].normalizedSpeed = 0f;
+		myAnimation.clip = SandwormAnimationClip;
+		myAnimation.AddClip (SandwormAnimationClip, "SandwormAnimation");
+		myAnimation.Play ("SandwormAnimation");
+		myAnimation ["SandwormAnimation"].enabled = true;
+		myAnimation ["SandwormAnimation"].normalizedSpeed = 0f;
 
 		splineAnimation = GetComponent <Animation> ();
 		splineAnimation.Play ("SplineAnimation");
@@ -213,7 +213,7 @@ public class Sandworm : MonoBehaviour {
 			} else {
 				emit.enabled = true;
 				ParticleSystem.MinMaxCurve rate = emit.rate;
-				rate.constant = emission * ParticleEmissionRates [i];
+				rate.constantMax = emission * ParticleEmissionRates [i];
 				emit.rate = rate;
 			}
 		}
@@ -265,9 +265,9 @@ public class Sandworm : MonoBehaviour {
 			TailPieces [i].localScale = Vector3.one;
 		}
 
-		animation ["SandwormAnimation"].normalizedTime = NormalizedPosition * WormAnimationMultiplier;
+		myAnimation ["SandwormAnimation"].normalizedTime = NormalizedPosition * WormAnimationMultiplier;
 		splineAnimation ["SplineAnimation"].normalizedTime = NormalizedPosition;
-		animation.Sample ();
+		myAnimation.Sample ();
 		splineAnimation.Sample ();
 
 		ChurnedSandMat.SetTextureOffset ("_SandTex", new Vector2 (FallingSandCurve.Evaluate (NormalizedPosition) * -10, 0));
